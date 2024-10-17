@@ -20,35 +20,8 @@ SELECT
         REGEXP_SUBSTR(log.data, '\(.*\)')
     )) AS USER_AGENT,
     TRIM(REGEXP_SUBSTR(ip.data, '\t(.*)')) AS REGION
-FROM 
-    DE.log log
-JOIN 
-    DE.ip ip ON REGEXP_SUBSTR(log.data, '^[^\t ]+') = REGEXP_SUBSTR(ip.data, '^[^\t]+');
-
-
-INSERT INTO ST.gueg_LOG (DT, LINK, USER_AGENT, REGION)
-SELECT 
-    TO_DATE(REGEXP_SUBSTR(log.data, '\d{8}'), 'YYYYMMDD') AS DT,
-    REGEXP_SUBSTR(log.data, 'http[^ ]*') AS LINK,
-    TRIM(CONCAT(
-        REGEXP_SUBSTR(log.data, '(\d+)\s+(\d+)\s+(Safari/[^ ]*)'),
-        ' ',
-        REGEXP_SUBSTR(log.data, '\(.*\)')
-    )) AS USER_AGENT,
-    TRIM(REGEXP_SUBSTR(ip.data, '\t(.*)')) AS REGION
-FROM 
-    DE.log log
-JOIN 
-    DE.ip ip ON REGEXP_SUBSTR(log.data, '^[^\t ]+') = REGEXP_SUBSTR(ip.data, '^[^\t]+');
-
-
-
-
-
-
-
-
-
+FROM DE.log log
+JOIN DE.ip ip ON REGEXP_SUBSTR(log.data, '^[^\t ]+') = REGEXP_SUBSTR(ip.data, '^[^\t]+');
 
 INSERT INTO ST.gueg_LOG_REPORT (REGION, BROWSER)
 SELECT 
