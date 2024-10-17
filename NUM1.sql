@@ -7,12 +7,11 @@ CREATE TABLE st.gueg_BOOK_INFO (
     PRIMARY KEY (book_id)
 );
 
-
 INSERT INTO st.gueg_BOOK_INFO (book_id, category, title, author, price)
 SELECT 
     ROW_NUMBER() OVER () AS book_id,
     (matches.category)[1] AS category,
-    (matches.title)[1] AS title,
+    TRIM(BOTH ' ' FROM REPLACE(REGEXP_REPLACE((matches.title)[1], '</p>', ''), '<p>', '')) AS title,
     (matches.author)[1] AS author,
     CAST(TRIM(BOTH ' ' FROM REPLACE(REGEXP_REPLACE((matches.price)[1], '[^0-9.]', '', 'g'), '₽', '')) AS DECIMAL(10, 2)) AS price
 FROM DE.HTML_DATA,
